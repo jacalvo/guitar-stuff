@@ -46,13 +46,15 @@ class Fretboard(object):
 
     def print_notes(self, min_fret, max_fret, notes=NOTES):
         self._print_border(min_fret, max_fret)
+        num = 1
         for string in self.strings:
-            self._print_string(string, min_fret, max_fret, notes)
+            self._print_string(num, string, min_fret, max_fret, notes)
             self._print_border(min_fret, max_fret)
+            num += 1
         self._print_inlays(min_fret, max_fret)
 
-    def _print_string(self, string, min_fret, max_fret, notes):
-        line = ''
+    def _print_string(self, num, string, min_fret, max_fret, notes):
+        line = str(num) + ' '
         for fret in range(min_fret, max_fret + 1):
             note = string.get_note_at_fret(fret)
             if not note in notes:
@@ -63,10 +65,10 @@ class Fretboard(object):
         print line + '|'
 
     def _print_border(self, min_fret, max_fret):
-        print '-' * ((max_fret - min_fret + 1) * 5 + 1)
+        print (' ' * 2) + ('-' * ((max_fret - min_fret + 1) * 5 + 1))
 
     def _print_inlays(self, min_fret, max_fret):
-        line = ' '
+        line = ' ' * 3
         for i in range(min_fret, max_fret + 1):
             line += ' '
             if (i == 12) or ((i % 2 != 0) and (i != 1) and (i != 11) and (i != 13)):
