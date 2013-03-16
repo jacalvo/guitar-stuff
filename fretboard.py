@@ -44,15 +44,45 @@ class Fretboard(object):
     def get_strings(self):
         return self.strings
 
-    def print_notes(self, max_fret):
+    def print_notes(self, min_fret, max_fret, notes=NOTES):
+        self._print_border(min_fret, max_fret)
         for string in self.strings:
-            for fret in range(max_fret):
-                print string.get_note_at_fret(fret),
-            print
+            self._print_string(string, min_fret, max_fret, notes)
+            self._print_border(min_fret, max_fret)
+        self._print_inlays(min_fret, max_fret)
+
+    def _print_string(self, string, min_fret, max_fret, notes):
+        line = ''
+        for fret in range(min_fret, max_fret + 1):
+            note = string.get_note_at_fret(fret)
+            if not note in notes:
+                note = ' '
+            if len(note) == 1:
+                note += ' '
+            line += '| ' + note + ' '
+        print line + '|'
+
+    def _print_border(self, min_fret, max_fret):
+        print '-' * ((max_fret - min_fret + 1) * 5 + 1)
+
+    def _print_inlays(self, min_fret, max_fret):
+        line = ' '
+        for i in range(min_fret, max_fret + 1):
+            line += ' '
+            if (i == 12) or ((i % 2 != 0) and (i != 1) and (i != 11) and (i != 13)):
+                line += str(i)
+                if i < 10:
+                    line += ' ' * 2
+                else:
+                    line += ' '
+            else:
+                line += ' ' * 3
+            line += ' '
+        print line
 
 def main():
     guitar = Fretboard(['E', 'A', 'D', 'G', 'B', 'E'])
-    guitar.print_notes(12)
+    guitar.print_notes(1, 22, ['A', 'B', 'C', 'F', 'G'])
 
 if __name__ == '__main__':
     main()
