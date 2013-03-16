@@ -17,7 +17,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 NOTES = ('A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#')
-MAX_FRET_NUMBER = 22
+MAX_FRET = 22
+MAX_STRING = 6
 
 class String(object):
     def __init__(self, key):
@@ -28,8 +29,8 @@ class String(object):
         return self.key
 
     def get_note_at_fret(self, fret):
-        if fret < 0 or fret > MAX_FRET_NUMBER:
-            raise Error("Invalid fret number")
+        if fret < 0 or fret > MAX_FRET:
+            raise ValueError("Invalid fret number")
 
         pos = (self.key_offset + fret) % len(NOTES)
         return NOTES[pos]
@@ -40,6 +41,11 @@ class Fretboard(object):
         self.strings = []
         for key in tuning:
             self.strings.append(String(key))
+
+    def get_note_at_string_and_fret(self, string, fret):
+        if string < 1 or string > MAX_STRING:
+            raise ValueError("Invalid string number")
+        return self.strings[string - 1].get_note_at_fret(fret)
 
     def get_strings(self):
         return self.strings
